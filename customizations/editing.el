@@ -25,8 +25,9 @@
       )
 
 
-(global-set-key (kbd "C-q") 'undo)
-(global-set-key (kbd "C-f") 'undo-redo)
+(global-set-key (kbd "C-q") #'undo)
+(global-set-key (kbd "C-f") #'undo-redo)
+(global-set-key (kbd "C-x :") #'comment-line)
 
 ;;
 ;;(global-undo-fu-session-mode)

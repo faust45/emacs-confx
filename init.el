@@ -45,6 +45,9 @@
 (load "editing.el")
 (load "go.el")
 
+(setq-default modal-mode t)
+(setq-default eldoc-mode -1)
+
 (use-package selectrum
   :config (set-face-attribute 'selectrum-current-candidate nil
 			      :foreground "yellow"
@@ -70,7 +73,7 @@
  '(custom-safe-themes
    '("c7000071e9302bee62fbe0072d53063da398887115ac27470d664f9859cdd41d" default))
  '(package-selected-packages
-   '(haskell-mode @ go-mode keyfreq use-package selectrum expand-region dash)))
+   '(geiser-guile writeroom-mode speed-type pdf-tools eglot guix haskell-mode @ go-mode keyfreq use-package selectrum expand-region dash)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

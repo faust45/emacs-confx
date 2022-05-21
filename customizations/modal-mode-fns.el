@@ -94,6 +94,10 @@
   (if modal-mode
       (switch-modal-to-insert)))
 
+(defun insert-brackets-c ()
+  (interactive)
+  (insert "{}"))
+
 (defun insert-newline-up ()
   (interactive)
   (previous-line)

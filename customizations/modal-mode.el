@@ -24,14 +24,14 @@
   '(
     (?d . save-all)
     (?s . isearch-forward-symbol-at-point)
-    (?\C-\; . project-find-file)))
+    (?\C-\: . project-find-file)))
 
 (defvar movements-map
   '(
-    (?\. . beginning-of-buffer)
-    (?\, . end-of-buffer)
-    (?\/ . scroll-down)
-    (?\h . scroll-up)
+    (?\k . beginning-of-buffer)
+    (?\. . end-of-buffer)
+    (?\, . scroll-down-line)
+    (?\h . scroll-up-line)
 
     (?e . next-line)
     (?i . previous-line)
@@ -48,7 +48,7 @@
     (?a . er/mark-outside-pairs)
     (?e . er/mark-method-call)
     (?s . er/mark-symbol)
-    (?g . mark-line)))
+    (?d . mark-line)))
 
 (defvar foo `(a b c))
 
@@ -62,7 +62,7 @@
 (defvar modal-mode-map
   `(keymap
     ,@movements-map
-    (?g . modal-take)
+    (?d . modal-take)
     (?\  . modal-copy)
 
     (?\C-d . dired-default)
@@ -107,6 +107,7 @@
     (?\; . upper-case-next-char)
     (?9 . insert-brackets-b)
     (?\[ . insert-brackets-a)
+    (?\C-\: . insert-brackets-c)
     (?\C-l . yank-and-indent)
     (?2 . insert-single-quote)
     (?3 . insert-quotes)
