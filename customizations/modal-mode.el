@@ -48,7 +48,7 @@
     (?a . er/mark-outside-pairs)
     (?e . er/mark-method-call)
     (?s . er/mark-symbol)
-    (?d . mark-line)))
+    (?g . mark-line)))
 
 (defvar foo `(a b c))
 
@@ -62,14 +62,18 @@
 (defvar modal-mode-map
   `(keymap
     ,@movements-map
-    (?d . modal-take)
+    (?a keymap
+	(?l . jump-last-edit)
+	(?a . jump-prev-edit)
+	(?o . comment-line))
+    (?g . modal-take)
     (?\  . modal-copy)
 
+    (?c . x-abbr-ins)
     (?\C-d . dired-default)
     (?t . switch-modal-to-insert)
     (?3 . insert-quotes)
     (?\C-? . ignore)
-    
     ;; (?\C-m . winner-undo)
 
     (tab . other-window)
@@ -81,7 +85,8 @@
 
     (?\C-b . x-abbr-expand-wrap-region)
     (?\C-p . x-join-line)
-    
+
+    (?p . copy-line)
     (?\C-l . yank-and-indent)
     (?\C-u . yank-down-line)
     (?\C-y . yank-up-line)
@@ -107,7 +112,7 @@
     (?\; . upper-case-next-char)
     (?9 . insert-brackets-b)
     (?\[ . insert-brackets-a)
-    (?\C-\: . insert-brackets-c)
+    (?\{ . insert-brackets-c)
     (?\C-l . yank-and-indent)
     (?2 . insert-single-quote)
     (?3 . insert-quotes)

@@ -46,6 +46,15 @@
     (kill-ring-save (region-beginning) (region-end))
     (goto-char pos)))
 
+(defun copy-line ()
+  (interactive "")
+  (save-excursion
+    (back-to-indentation)
+    (kill-ring-save
+     (point)
+     (line-end-position))
+    (message "1 line copied")))
+
 (defun concat-sym (&rest a)
   (intern (mapconcat 'symbol-name a "")))
 
@@ -69,6 +78,7 @@
 
 (defun switch-insert-to-modal ()
   (interactive)
+  (save-last-edit-pos)
   (insert-mode -1)
   (modal-mode +1))
 
@@ -96,7 +106,10 @@
 
 (defun insert-brackets-c ()
   (interactive)
-  (insert "{}"))
+  (insert "{}")
+  (backward-char 1)
+  (if modal-mode
+      (switch-modal-to-insert)))
 
 (defun insert-newline-up ()
   (interactive)
@@ -115,9 +128,9 @@
     (insert-newline-down)
     (let ((s
 	   (->> kill-ring
-	     car
-	     substring-no-properties
-	     (replace-regexp-in-string "\n$" ""))))
+		car
+		substring-no-properties
+		(replace-regexp-in-string "\n$" ""))))
       (insert s))
     (call-interactively 'indent-region)))
 
@@ -127,9 +140,9 @@
     (insert-newline-up)
     (let ((s
 	   (->> kill-ring
-	     car
-	     substring-no-properties
-	     (replace-regexp-in-string "\n$" ""))))
+		car
+		substring-no-properties
+		(replace-regexp-in-string "\n$" ""))))
       (insert s))
     (call-interactively 'indent-region)))
 
@@ -166,7 +179,7 @@
       ((bounds
 	(if (use-region-p)
 	    (cons (region-beginning) (region-end))
-	    (bounds-of-thing-at-point 'symbol))))
+	  (bounds-of-thing-at-point 'symbol))))
     (delete-region (car bounds) (cdr bounds))
     (yank-and-indent)))
 
@@ -202,15 +215,20 @@
   (interactive)
   (insert-brackets "[]"))
 
+
 (defun save-all ()
   (interactive)
   (save-some-buffers t))
 
-(defun x-abbr-expand ()
-  (interactive)
-  (er/mark-word)
-  (let (s (thing-at-point 'symbol))
-    ))
+(defun x-abbr-ins (ch)
+  (interactive "c")
+  (let ((code (lookup-key x-abbr-map (vector ch))))
+    (if code
+	(progn
+	 (insert code)
+	 (search-backward "$")
+	 (delete-char 1)
+	 (switch-modal-to-insert)))))
 
 (defun x-abbr-expand-wrap-region (ch)
   (interactive "cApply abbr...")
@@ -223,5 +241,19 @@
     (er/expand-region +1)
     (indent-region (point) (mark))
     (goto-char pos)))
+
+(defun save-last-edit-pos ()
+  (if (not (boundp 'last-edit-pos-list))
+      (setq last-edit-pos-list ()))
+  (push (point) last-edit-pos-list))
+
+(defun jump-last-edit ()
+  (interactive)
+  (goto-char (pop last-edit-pos-list)))
+
+(defun jump-prev-edit ()
+  (interactive)
+  (jump-last-edit)
+  (jump-last-edit))
 
 (provide 'modal-mode-fns)

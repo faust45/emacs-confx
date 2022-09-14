@@ -10,6 +10,9 @@
 (require 'saveplace)
 (require 'modal-mode)
 
+(blink-cursor-mode 0)
+(setq-default visual-fill-column-center-text t)
+
 (setq uniquify-buffer-name-style 'forward)
 (setq recentf-save-file (concat user-emacs-directory ".recentf"))
 (setq recentf-max-menu-items 40)
@@ -28,6 +31,8 @@
 (global-set-key (kbd "C-q") #'undo)
 (global-set-key (kbd "C-f") #'undo-redo)
 (global-set-key (kbd "C-x :") #'comment-line)
+(global-set-key (kbd "C-:") #'project-find-file)
+(global-set-key (kbd "C-n") #'execute-extended-command)
 
 ;;
 ;;(global-undo-fu-session-mode)
@@ -45,6 +50,7 @@
 (add-hook 'minibuffer-setup-hook 'disable-modal-and-common-modes)
 (setq buffer-save-without-query t)
 
+(modify-syntax-entry ?. "w" (standard-syntax-table))
 (modify-syntax-entry ?- "w" (standard-syntax-table))
 (modify-syntax-entry ?_ "w" (standard-syntax-table))
 ;; (modify-syntax-entry ?: "c" (standard-syntax-table))
@@ -91,11 +97,24 @@
 
 (defvar x-abbr-map
 '(keymap
-  (?f . "func () {\n\n}")
+  (?f . "func $() {\n\n}\n")
   ))
 
-;; (add-hook 'go-mode-hook
-;;           (lambda ()
-;;             ))
+;; (eval-after-load "geiser-impl"
+;; '(add-to-list 'geiser-implementations-alist
+;; 	       '((dir "/home/moon/local-guix/my") guile)))
+;; ;; (add-hook 'eshell-mode-hook
+;; 	 (lambda ()))
+	   
+;; (define-key eshell-mode-map (kbd "C-m") 'eshell-send-input)
+
+
+(defun kill-other-buffers ()
+  (interactive)
+  (let* ((bname (buffer-name (current-buffer)))
+	 (keep-buffers (list "*scratch*" "*Messages*" bname)))
+    (->> (buffer-list)
+	 (--remove (-contains? keep-buffers (buffer-name it)))
+	 (-map 'kill-buffer))))
 
 

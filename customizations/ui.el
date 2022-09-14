@@ -2,17 +2,18 @@
 (setq inhibit-startup-message t) 
 (setq initial-scratch-message nil)
 
+(when (window-system)
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1))
 
-(scroll-bar-mode -1)
-(tool-bar-mode -1)
-(menu-bar-mode -1)
 (savehist-mode 1)
 
 (set-cursor-color "steel blue")
-(fset 'yes-or-no-p 'y-or-n-p)
+(setq use-short-answers t)
 
 (set-face-attribute 'default nil :height 130)
-(set-frame-font "JetBrains Mono Bold 15" nil t)
+(set-frame-font "JetBrains Mono Bold 13" nil t)
 (eval-after-load "faces"
   (progn
     (set-face-background 'mode-line "light slate gray")))
@@ -27,4 +28,8 @@
 
 (setq split-width-threshold 0)
 (load-theme 'dracula t)
+
+(use-package perfect-margin
+  :custom
+  (perfect-margin-visible-width 90))
 
